@@ -4,8 +4,22 @@ var rp = require('request-promise-native').defaults({
     strictSSL :false
   })
 
+const isArray = require('lodash/isArray');
 
 
+/**
+ * Force a value to be an array
+ * If an array is passed it is returned
+ * Otherwise, a single-value array is returned
+ * @param {Mixed} value - value to convert
+ * @return {Array} - array value
+ */
+function forceArray(value) {
+  if(isArray(value)) {
+    return value;
+  }
+  return [value];
+}
 
 
 //make a simple http request (without a body), uses promises
@@ -76,8 +90,8 @@ function createGUID() {
 module.exports = {
   createGUID: createGUID,
   makeURIRequest: makeURIRequest,
-  makeURIRequestWithBody: makeURIRequestWithBody
-
+  makeURIRequestWithBody: makeURIRequestWithBody,
+  forceArray
 
 
 }

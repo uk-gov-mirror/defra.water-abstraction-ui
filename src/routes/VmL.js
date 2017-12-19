@@ -168,7 +168,7 @@ module.exports = [
     validate : {
       payload : {
         token : Joi.string().required(),
-        licences : Joi.array()
+        licences : Joi.any()
       }
     }
   }},

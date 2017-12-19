@@ -15,6 +15,7 @@ const View = require('../lib/view');
 const joiPromise = require('../lib/joi-promise');
 const IDM = require('../lib/connectors/idm');
 const CRM = require('../lib/connectors/crm');
+const Helpers = require('../lib/helpers');
 
 // Create promisified versions of Iron seal/unseal
 const ironSeal = Bluebird.promisify(Iron.seal);
@@ -74,8 +75,6 @@ function postLicenceAdd(request, reply) {
       return CRM.getDocumentHeaders({ system_external_id : licenceNumbers, verified : null, verification_id : null });
     })
     .then((res) => {
-
-      console.log(res);
 
       // Check 1+ licences found
       if(res.data.length < 1) {
@@ -226,7 +225,10 @@ function postConfirmLicences(request, reply) {
   viewContext.pageTitle = 'GOV.UK - Add Licence';
 
   const {entity_id} = request.auth.credentials;
-  const {licences, token} = request.payload;
+  const {token} = request.payload;
+
+  // Force licences to be array - if 1 could be string, if 0 could be undefined
+  const licences = Helpers.forceArray(request.payload.licences);
 
   _validateRequest(token, licences)
     .then(() => {
