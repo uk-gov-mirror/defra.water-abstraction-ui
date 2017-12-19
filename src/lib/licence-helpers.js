@@ -32,6 +32,7 @@ function extractLicenceNumbers(str) {
  * @return {Boolean} - whether licences pass similarity test
  */
 function checkLicenceSimilarity(licences) {
+
   if(licences.name < 2) {
     return true;
   }
@@ -43,10 +44,10 @@ function checkLicenceSimilarity(licences) {
     return x;
   };
   const names = uniq(licences.map((licence) => {
-    return sanitize(licence.document_original_name);
+    return sanitize(licence.metadata.Name);
   }));
   const postcodes = uniq(licences.map((licence) => {
-    return sanitize(licence.document_postcode);
+    return sanitize(licence.metadata.Postcode);
   }));
   if(names.length === 1 || postcodes.length === 1) {
     return true;

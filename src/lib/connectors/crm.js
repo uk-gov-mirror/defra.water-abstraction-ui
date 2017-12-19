@@ -18,21 +18,46 @@ const moment = require('moment');
  * @param {String} verification_code - the verification code supplied by the user
  * @return {Promise} - resolves if code OK
  */
-function checkVerification(entity_id, company_entity_id, verification_code) {
-  var uri = process.env.CRM_URI + '/verification/check';
-  return rp({
-    method: 'POST',
-    uri,
-    headers: {
-      Authorization: process.env.JWT_TOKEN
-    },
-    body : {
-      entity_id,
-      company_entity_id,
-      verification_code
-    },
-    json : true
-  });
+// function checkVerification(entity_id, company_entity_id, verification_code) {
+//   var uri = process.env.CRM_URI + '/verification/check';
+//   return rp({
+//     method: 'POST',
+//     uri,
+//     headers: {
+//       Authorization: process.env.JWT_TOKEN
+//     },
+//     body : {
+//       entity_id,
+//       company_entity_id,
+//       verification_code
+//     },
+//     json : true
+//   });
+// }
+
+
+/**
+ * Get pending verification records for individual
+ * @param {String} entity_id - the individual entity ID
+ * @param {String} company_entity_id - the company entity ID
+ * @return {Promise} - resolves with verifications if found
+ */
+function getPendingVerifications(entity_id, company_entity_id) {
+    return rp({
+      method: 'GET',
+      uri : process.env.CRM_URI + '/verification',
+      headers: {
+        Authorization: process.env.JWT_TOKEN
+      },
+      qs : {
+        filter : JSON.stringify({
+          entity_id,
+          company_entity_id,
+          date_verified : null
+        })
+      },
+      json : true
+    });
 }
 
 /**
@@ -190,7 +215,30 @@ function getEntityRoles(entityId) {
 }
 
 /**
- * Get a list of licences based on the supplied options
+ * Get a list of document headers
+ * @param {Object} filter - the fields to filter on
+ * @param {Object} sort - the fields to sort on
+ * @example getDocumentHeaders({company_entity_id : 'someguid'}, {verified : +1})
+ */
+function getDocumentHeaders(filter, sort = {}) {
+  const uri = process.env.CRM_URI + '/documentHeader';
+  return rp({
+    uri,
+    method : 'GET',
+    headers : {
+      Authorization : process.env.JWT_TOKEN
+    },
+    json : true,
+    qs : {
+      filter : JSON.stringify(filter),
+      sort : JSON.stringify(sort)
+    }
+  });
+}
+
+
+/**
+ * Get a list of licences based on the supplied options for current user
  * @param {Object} filter - criteria to filter licence lisrt
  * @param {String} [filter.entity_id] - the current user's entity ID
  * @param {String} [filter.email] - the email address to search on
@@ -252,10 +300,11 @@ module.exports = {
   addEntityRole,
   createEntity,
   getLicences,
+  getDocumentHeaders,
   getLicenceInternalID,
   setLicenceName,
   createVerification,
-  checkVerification,
   completeVerification,
-  updateDocumentHeaders
+  updateDocumentHeaders,
+  getPendingVerifications
 }

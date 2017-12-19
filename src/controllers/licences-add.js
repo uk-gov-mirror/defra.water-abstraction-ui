@@ -71,7 +71,7 @@ function postLicenceAdd(request, reply) {
         throw {name : 'ValidationError'};
       }
       // Get unverified licences from DB
-      return CRM.getLicences({ system_external_id : licenceNumbers, verified : null, verification_id : null });
+      return CRM.getDocumentHeaders({ system_external_id : licenceNumbers, verified : null, verification_id : null });
     })
     .then((res) => {
 
@@ -148,7 +148,7 @@ async function _getPrimaryCompany(entityId) {
  */
 async function _getOrCreateCompanyEntity(entityId) {
 
-  const companyId = _getPrimaryCompany(entityId);
+  const companyId = await _getPrimaryCompany(entityId);
 
   if(companyId) {
     return companyId;
@@ -271,8 +271,21 @@ async function _verify(entityId, verificationCode) {
   }
 
   // Verify with code
-  const res = await CRM.checkVerification(entityId, companyEntityId, verificationCode);
-  const { verification_id, company_entity_id } = res.data;
+  const res = await CRM.getPendingVerifications(entityId, companyEntityId);
+  if(res.error) {
+    throw res.error;
+  }
+
+  // Try to match code
+  const verification = find(res.data, (item) => {
+    return item.verification_code === verificationCode;
+  });
+
+  if(!verification) {
+    throw {name : 'InvalidCodeError'};
+  }
+
+  const { verification_id, company_entity_id } = verification;
 
   // Update document headers
   const res2 = await CRM.updateDocumentHeaders({verification_id}, {company_entity_id, verified : 1});
