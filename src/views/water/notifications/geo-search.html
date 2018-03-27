@@ -1,0 +1,88 @@
+{{> styles}}
+<main id="content" tabindex="-1">
+  {{>element-phase-tag}}
+
+  <h1 class="heading-large">Geographic Search</h1>
+
+  <div class="article-container">
+    <article role="article" class="group">
+      <div class="inner text">
+
+
+        <form method="POST" action="/geo-search">
+
+          <input type="hidden" name="csrf_token" value="{{ csrfToken }}" />
+
+          <div class="form-group">
+            <label class="form-label" for="lat">
+              Latitude
+            </label>
+            <input value="{{ payload.lat }}" class="form-control" id="lat" type="text" name="lat">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="long">
+              Latitude
+            </label>
+            <input value="{{ payload.long }}" class="form-control" id="long" type="text" name="long">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="radius">
+              Search radius (Km)
+            </label>
+            <input value="{{ payload.radius }}" class="form-control" id="long" type="text" name="radius">
+          </div>
+
+          <button type="submit" class="button">Search</button>
+
+        </form>
+
+        {{#if mapData }}
+
+        <div id="map" style="width:100%; height: 400px;"></div>
+
+        <script>
+          window.mapData = {{{ stringify mapData }}};
+        </script>
+
+        <script>
+          function initMap() {
+            var uluru = {lat: 51.4527219, lng: -2.5965987};
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 8,
+              center : uluru
+            });
+
+            // Add clickable markers
+            window.mapData.forEach(function(row) {
+              var marker = new google.maps.Marker({
+                position: {
+                  lat : row.lat,
+                  lng : row.long
+                },
+                map: map,
+                title : row.licence_number
+              });
+
+              marker.addListener('click', function() {
+                window.location.href = '/licences/' + row.document_id;
+              });
+            });
+
+          }
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ apiKey }}&callback=initMap">
+        </script>
+
+
+        {{/if}}
+
+
+      </div>
+    </article>
+  </div>
+</main>
+{{> footerjs}}
+{{> debug}}

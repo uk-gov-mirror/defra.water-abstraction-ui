@@ -126,6 +126,7 @@ server.register([
   server.route(require('./src/routes/public'));
   server.route(require('./src/routes/VmL'));
   server.route(require('./src/routes/status'));
+  server.route(require('./src/modules/routes'));
 });
 
 server.errorHandler = function (error) {
