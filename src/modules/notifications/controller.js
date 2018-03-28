@@ -32,21 +32,17 @@ async function postSearch (request, reply) {
     }
   });
 
-  const mapData = result.data.map((row) => {
-    return {
-      document_id: row.document_id,
-      licence_number: row.system_external_id,
-      lat: row.lat,
-      long: row.long
-    };
-  });
+  // const mapData = result.data.map((row) => {
+  //   return {
+  //     document_id: row.document_id,
+  //     licence_number: row.system_external_id,
+  //     lat: row.lat,
+  //     long: row.long
+  //   };
+  // });
 
   const viewContext = View.contextDefaults(request);
   viewContext.data = result.data;
-  viewContext.apiKey = process.env.google_maps_api_key;
-  viewContext.mapData = mapData;
-
-  console.log(mapData);
 
   viewContext.pageTitle = 'Geographic search';
   return reply.view('water/notifications/geo-search', viewContext);

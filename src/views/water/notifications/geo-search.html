@@ -22,7 +22,7 @@
 
           <div class="form-group">
             <label class="form-label" for="long">
-              Latitude
+              Longitude
             </label>
             <input value="{{ payload.long }}" class="form-control" id="long" type="text" name="long">
           </div>
@@ -38,45 +38,18 @@
 
         </form>
 
-        {{#if mapData }}
-
-        <div id="map" style="width:100%; height: 400px;"></div>
-
-        <script>
-          window.mapData = {{{ stringify mapData }}};
-        </script>
-
-        <script>
-          function initMap() {
-            var uluru = {lat: 51.4527219, lng: -2.5965987};
-            var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 8,
-              center : uluru
-            });
-
-            // Add clickable markers
-            window.mapData.forEach(function(row) {
-              var marker = new google.maps.Marker({
-                position: {
-                  lat : row.lat,
-                  lng : row.long
-                },
-                map: map,
-                title : row.licence_number
-              });
-
-              marker.addListener('click', function() {
-                window.location.href = '/licences/' + row.document_id;
-              });
-            });
-
-          }
-        </script>
-        <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key={{ apiKey }}&callback=initMap">
-        </script>
-
-
+        {{#if data }}
+        <table>
+          <tbody>
+          {{# each data }}
+          <tr>
+            <td><a href="/licences/{{ this.document_id }}">{{ this.system_external_id }}</a></td>
+            <td>{{ this.entity_nm }}</td>
+            <td>{{ this.distance_km }}Km</td>
+          </tr>
+          {{/each}}
+        </tbody>
+        </table>
         {{/if}}
 
 
