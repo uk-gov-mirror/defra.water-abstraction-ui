@@ -18,7 +18,9 @@ function getSearch (request, reply) {
  * Post handler for geo search form
  */
 async function postSearch (request, reply) {
-  const { lat, long, radius } = request.payload;
+  const { lat, long, radius, regionCode, camsCode, areaCode } = request.payload;
+
+  console.log({lat, long, radius, regionCode, camsCode, areaCode});
 
   const result = await rp({
     uri: `${process.env.CRM_URI}/documentHeader/search`,
@@ -28,7 +30,7 @@ async function postSearch (request, reply) {
     },
     json: true,
     qs: {
-      filter: JSON.stringify({lat, long, radius})
+      filter: JSON.stringify({lat, long, radius, regionCode, camsCode, areaCode})
     }
   });
 

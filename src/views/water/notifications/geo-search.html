@@ -2,58 +2,132 @@
 <main id="content" tabindex="-1">
   {{>element-phase-tag}}
 
-  <h1 class="heading-large">Geographic Search</h1>
+  <h1 class="heading-large">Search for licences by location</h1>
 
   <div class="article-container">
     <article role="article" class="group">
-      <div class="inner text">
 
 
         <form method="POST" action="/geo-search">
 
           <input type="hidden" name="csrf_token" value="{{ csrfToken }}" />
 
-          <div class="form-group">
-            <label class="form-label" for="lat">
-              Latitude
-            </label>
-            <input value="{{ payload.lat }}" class="form-control" id="lat" type="text" name="lat">
-          </div>
+          <div class="grid-row">
+            <div class="column-one-half">
 
-          <div class="form-group">
-            <label class="form-label" for="long">
-              Longitude
-            </label>
-            <input value="{{ payload.long }}" class="form-control" id="long" type="text" name="long">
-          </div>
+              <div class="form-group">
+                <label class="form-label" for="lat">
+                  Latitude
+                </label>
+                <input value="{{ payload.lat }}" class="form-control" id="lat" type="text" name="lat">
+              </div>
 
-          <div class="form-group">
-            <label class="form-label" for="radius">
-              Search radius (Km)
-            </label>
-            <input value="{{ payload.radius }}" class="form-control" id="long" type="text" name="radius">
+              <div class="form-group">
+                <label class="form-label" for="long">
+                  Longitude
+                </label>
+                <input value="{{ payload.long }}" class="form-control" id="long" type="text" name="long">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="radius">
+                  Search radius (Km)
+                </label>
+                <input value="{{ payload.radius }}" class="form-control" id="long" type="text" name="radius">
+              </div>
+
           </div>
+          <div class="column-one-half">
+
+            <div class="form-group">
+              <label class="form-label" for="radius">
+                Region code
+              </label>
+              <input value="{{ payload.regionCode }}" class="form-control" id="long" type="text" name="regionCode">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="radius">
+                Cams code
+              </label>
+              <input value="{{ payload.camsCode }}" class="form-control" id="long" type="text" name="camsCode">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="radius">
+                Area code
+              </label>
+              <input value="{{ payload.areaCode }}" class="form-control" id="long" type="text" name="areaCode">
+            </div>
+          </div>
+        </div>
 
           <button type="submit" class="button">Search</button>
 
         </form>
 
         {{#if data }}
-        <table>
-          <tbody>
-          {{# each data }}
-          <tr>
-            <td><a href="/licences/{{ this.document_id }}">{{ this.system_external_id }}</a></td>
-            <td>{{ this.entity_nm }}</td>
-            <td>{{ this.distance_km }}Km</td>
-          </tr>
-          {{/each}}
-        </tbody>
-        </table>
+
+        <br />
+        <br />
+
+          <!-- Show licences -->
+          <h2 class="heading-medium">Licences</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Licence number</th>
+                <th>Licence holder</th>
+              </tr>
+            </thead>
+            <tbody>
+            {{# each data.licences }}
+            <tr>
+              <td><a href="/licences/{{ this.document_id }}">{{ this.system_external_id }}</a></td>
+              <td>{{ this.metadata.Name }}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+          </table>
+
+          <!-- Show contacts -->
+
+          <br />
+          <br />
+
+          <h2 class="heading-medium">Contacts</h2>
+          <table>
+            <thead>
+              <th>Contact method</th>
+              <th>Contact details</th>
+            </thead>
+            <tbody>
+              {{# each data.contacts }}
+              <tr>
+                <td>{{ this.contactType }}</td>
+                <td>
+                  {{#equal contactType "email"}}
+                    {{ this.email }}
+                  {{else}}
+                    {{ this.Salutation }} {{ this.Forename }} {{ this.Name }}<br />
+                    {{ this.AddressLine1 }}<br />
+                    {{ this.AddressLine2 }}<br />
+                    {{ this.AddressLine3 }}<br />
+                    {{ this.AddressLine4 }}<br />
+                    {{ this.Town }}<br />
+                    {{ this.County }}<br />
+                    {{ this.Postcode }}<br />
+                  {{/equal}}
+
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+
         {{/if}}
 
 
-      </div>
     </article>
   </div>
 </main>
