@@ -16,8 +16,6 @@ const getSchemaForm = async (request, h) => {
   const stationValues = stations.map(row => row.station_reference);
   const stationLabels = stations.map(row => row.label + ' at ' + row.grid_reference);
 
-
-
   console.log(stations);
 
   const testSchema = {
@@ -28,7 +26,7 @@ const getSchemaForm = async (request, h) => {
       title: {type: 'string', title: 'Blah', default: 'A new task'},
       done: {type: 'boolean', title: 'Done?', default: false},
       conditionCode: {type: 'string', enum: codeValues, title: 'Condition code', enumNames: codeLabels},
-      gaugingStation: {type : 'string', enium}
+      gaugingStation: {type: 'string', enum: stationValues, title: 'Gauging Station', enumNames: stationLabels},
       wr22Code: {type: 'string', enum: ['2.1', '2.2']}
     }
   };
