@@ -1,3 +1,4 @@
+const absReformRoutes = require('./abs-reform/routes');
 const addLicencesRoutes = require('./add-licences/routes');
 const authRoutes = require('./auth/routes');
 const coreRoutes = require('./core/routes');
@@ -13,6 +14,7 @@ const registrationRoutes = require('./registration/routes');
 const serviceStatusRoutes = require('./service-status/routes');
 
 module.exports = [
+  ...Object.values(absReformRoutes),
   ...Object.values(addLicencesRoutes),
   ...Object.values(authRoutes),
   ...Object.values(coreRoutes),
