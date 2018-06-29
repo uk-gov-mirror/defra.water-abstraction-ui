@@ -48,6 +48,11 @@ module.exports = {
     router: {
       stripTrailingSlash: true
     }
-  }
+  },
 
+  waterAbstraction: {
+    regimeId: process.env.licenceRegimeId,
+    licenceTypeId: process.env.licenceTypeId,
+    reformLicenceTypeId: 10
+  }
 };

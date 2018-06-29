@@ -2,6 +2,65 @@ const LicenceTitleLoader = require('../../lib/licence-title-loader');
 const licenceTitleLoader = new LicenceTitleLoader();
 const {uniq} = require('lodash');
 const { gaugingStations } = require('../../lib/connectors/water');
+const CRM = require('../../lib/connectors/crm.js');
+const Permit = require('../../lib/connectors/permit.js');
+const { waterAbstraction } = require('../../../config.js');
+
+const findOrCreateARLicence = async (licenceNumber) => {
+  const filter = {
+    licence_ref: licenceNumber,
+    licence_regime_id: waterAbstraction.regimeId,
+    licence_type_id: waterAbstraction.reformLicenceTypeId
+  };
+
+  // Find AR permit repo doc
+  const { data: [arLicence], error } = await Permit.licences.findMany(filter);
+
+  if (error) {
+    throw error;
+  }
+
+  if (arLicence) {
+    return arLicence;
+  }
+
+  const { data, error2 } = await Permit.licences.create({
+    ...filter,
+    licence_data_value: '{ "data" : [] }'
+  });
+
+  if (error2) {
+    throw error2;
+  }
+  return data;
+};
+
+/**
+ * View licence AR data
+ * @param {String} request.params.documentId - the ID of the record in
+ */
+const getLicence = async (request, h) => {
+  const { documentId } = request.params;
+
+  // Find CRM doc
+  const { data: documentHeader, error } = await CRM.documents.findOne(documentId);
+  if (error) {
+    throw error;
+  }
+
+  // Find permit repo doc
+  const { data: licence, error: error2} = await Permit.licences.findOne(documentHeader.system_internal_id);
+  if (error2) {
+    throw error2;
+  }
+
+  const arData = await findOrCreateARLicence(licence.licence_ref);
+
+  return h.view('water/abs-reform/licence', {
+    licence,
+    arData
+  });
+};
 
 const getSchemaForm = async (request, h) => {
   // Read condition titles from CSV
@@ -16,8 +75,6 @@ const getSchemaForm = async (request, h) => {
   const stationValues = stations.map(row => row.station_reference);
   const stationLabels = stations.map(row => row.label + ' at ' + row.grid_reference);
 
-  console.log(stations);
-
   const testSchema = {
     title: 'Condition',
     type: 'object',
@@ -26,8 +83,7 @@ const getSchemaForm = async (request, h) => {
       title: {type: 'string', title: 'Blah', default: 'A new task'},
       done: {type: 'boolean', title: 'Done?', default: false},
       conditionCode: {type: 'string', enum: codeValues, title: 'Condition code', enumNames: codeLabels},
-      gaugingStation: {type: 'string', enum: stationValues, title: 'Gauging Station', enumNames: stationLabels},
-      wr22Code: {type: 'string', enum: ['2.1', '2.2']}
+      gaugingStation: {type: 'string', enum: stationValues, title: 'Gauging Station', enumNames: stationLabels}
     }
   };
 
@@ -41,5 +97,6 @@ const getSchemaForm = async (request, h) => {
 };
 
 module.exports = {
+  getLicence,
   getSchemaForm
 };

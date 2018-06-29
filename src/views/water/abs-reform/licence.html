@@ -1,0 +1,41 @@
+{{> styles}}
+<main id="content" tabindex="-1">
+  {{>element-phase-tag}}{{>element-main-nav}}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large">{{ pageTitle }}</h1>
+
+      <form method="POST" action="/admin/abs-reform/licence/{{ arData.licence_id }}">
+
+        <input type="hidden" name="licence_id" value="{{ arData.licence_id }}" />
+
+        <div class="form-group">
+          <fieldset class="inline">
+
+            <legend>
+              <h1 class="heading-medium">
+              Licence number {{ licence.licence_ref }}
+              </h1>
+            </legend>
+
+            <div class="multiple-choice">
+              <input id="condition" type="radio" name="type" value="Yes">
+              <label for="condition">Condition</label>
+            </div>
+
+          </fieldset>
+        </div>
+
+        <button class="button" type="submit">Add data point</button>
+
+      </form>
+  </div>
+</div>
+
+
+
+
+
+
+</main>
