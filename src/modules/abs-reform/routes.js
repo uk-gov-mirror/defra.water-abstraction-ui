@@ -23,11 +23,11 @@ module.exports = {
   },
 
   // Create data point in licence
-  postAddData: {
-    method: 'POST',
-    path: '/admin/abs-reform/licence/{licenceId}',
-    handler: controller.postLicence
-  },
+  // postAddData: {
+  //   method: 'POST',
+  //   path: '/admin/abs-reform/licence/{licenceId}',
+  //   handler: controller.postLicence
+  // },
 
   // Edit data point within licence
   getSchemaForm: {
