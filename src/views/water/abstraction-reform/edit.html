@@ -5,6 +5,11 @@
 
   <a class="link-back" href="/admin/abstraction-reform/licence/{{ documentId }}">Back</a>
 
+
+  <div class="grid-row">
+      {{>form-errors form }}
+  </div>
+
   <div class="grid-row">
     <div class="column-full">
 
@@ -14,6 +19,11 @@
           {{ licence.licence_data_value.LIC_NO }}
       </h1>
 
+
+
+      {{>form form }}
+
+      <!--
 
       <form method="POST" action="{{ formAction }}">
 
@@ -33,6 +43,7 @@
 
       <button type="submit" class="button">Submit changes</button>
       </form>
+    -->
 
     </div>
   </div>

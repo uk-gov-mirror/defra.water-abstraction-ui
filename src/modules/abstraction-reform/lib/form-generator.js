@@ -1,5 +1,5 @@
 const { URL } = require('url');
-const refParser = require('json-schema-ref-parser');
+
 const { isObject, each } = require('lodash');
 const sentenceCase = require('sentence-case');
 const apiHelpers = require('./api-helpers');
@@ -17,15 +17,16 @@ const types = {
  * @return {Object} JSON schema
  */
 const picklistSchemaFactory = (picklist, items) => {
+  const filtered = items.filter(item => !item.hidden);
   if (picklist.id_required) {
     return {
       type: 'object',
-      enum: items.map(item => ({ id: item.id, value: item.value }))
+      enum: filtered.map(item => ({ id: item.id, value: item.value }))
     };
   } else {
     return {
       type: 'string',
-      enum: items.map(item => item.value)
+      enum: filtered.map(item => item.value)
     };
   }
 };
@@ -51,6 +52,8 @@ const waterResolver = {
       const picklist = await apiHelpers.getPicklist(ref);
       const items = await apiHelpers.getPicklistItems(ref);
 
+      console.log(picklist, items);
+
       return picklistSchemaFactory(picklist, items);
     }
 
@@ -68,6 +71,7 @@ const waterResolver = {
  * @return {Promise} resolves with JSON schema with references converted to literals
  */
 const dereference = async (schema) => {
+  const refParser = require('json-schema-ref-parser');
   const populated = await refParser.dereference(schema, { resolve: { waterResolver } });
   return populated;
 };
@@ -88,8 +92,11 @@ const guessLabel = (str) => {
  * @param {String} action - form action
  * @param {Object} schema - JSON schema object
  */
-const schemaToForm = (action, schema) => {
+const schemaToForm = (action, csrfToken, schema) => {
   const f = formFactory(action, 'POST', 'json-schema');
+
+  // Add CSRF token
+  f.fields.push(fields.hidden('csrf_token', {}, csrfToken));
 
   each(schema.properties, (item, key) => {
     const label = guessLabel(key);
@@ -105,11 +112,11 @@ const schemaToForm = (action, schema) => {
     } else if ('enum' in item) {
       // Object enum items
       if (isObject(item.enum[0])) {
-        f.fields.push(fields.radio(key, { label, choices: item.enum, key: 'id', mapper: 'objectMapper' }));
+        f.fields.push(fields.dropdown(key, { label, choices: item.enum, key: 'id', mapper: 'objectMapper' }));
       } else {
         // Scalar enum values (string/number)
         const mapper = item.type === 'number' ? 'numberMapper' : 'defaultMapper';
-        f.fields.push(fields.radio(key, { label, choices: item.enum, mapper }));
+        f.fields.push(fields.dropdown(key, { label, choices: item.enum, mapper }));
       }
     } else {
       // Scalar enum values (string/number)

@@ -1,4 +1,4 @@
-const { pick } = require('lodash');
+const { pick, get } = require('lodash');
 const shallowDiff = require('shallow-diff');
 
 const { load, update } = require('./lib/loader');
@@ -9,6 +9,8 @@ const { createEditPurpose, createEditLicence, createEditPoint, createEditConditi
 const { stateManager, getInitialState } = require('./lib/state-manager');
 const { search, recent } = require('./lib/search');
 const { STATUS_IN_PROGRESS, STATUS_IN_REVIEW } = require('./lib/statuses');
+const { schemaToForm, dereference } = require('./lib/form-generator');
+const { setValues } = require('../../lib/forms');
 
 // Config for editing different data models
 const objectConfig = {
@@ -29,6 +31,11 @@ const objectConfig = {
   },
   condition: {
     schema: require('./schema/condition.json'),
+    getter: getCondition,
+    actionCreator: createEditCondition
+  },
+  'wr22_2.1': {
+    schema: require('./schema/wr22/2.1.json'),
     getter: getCondition,
     actionCreator: createEditCondition
   }
@@ -93,8 +100,11 @@ const getViewLicence = async (request, h) => {
  * @param {String} request.params.documentId - CRM document ID for licence
  * @param {String} request.params.type - type of entity, purpose, point etc
  * @param {String} request.params.id - the ID of the entity
+ * @param {Number} request.query.create - whether creating a new data item
  */
 const getEditObject = async (request, h) => {
+  const isCreate = get(request.query, 'create', false);
+
   const {documentId, type, id} = request.params;
 
   // Load licence / AR licence from CRM
@@ -106,18 +116,28 @@ const getEditObject = async (request, h) => {
     return h.redirect(`/admin/abstraction-reform/licence/${documentId}?flash=locked`);
   }
 
-  const { schema, getter } = objectConfig[type];
+  // Get schema and de-reference
+  const { schema: schemaWithRefs, getter } = objectConfig[type];
+  const schema = await dereference(schemaWithRefs);
 
-  const data = extractData(getter(finalState.licence, id), schema);
+  // Build form object
+  let formAction = `/admin/abstraction-reform/licence/${documentId}/edit/${type}/${id}`;
+  const csrfToken = request.sessionStore.get('csrf_token');
+  let form = schemaToForm(formAction, csrfToken, schema);
+
+  if (isCreate) {
+    formAction += '?create=1';
+  } else {
+    const data = extractData(getter(finalState.licence, id), schema);
+    form = setValues(form, data);
+  }
 
   const view = {
     ...request.view,
     documentId,
     licence,
     pageTitle: `Edit ${type}`,
-    formAction: `/admin/abstraction-reform/licence/${documentId}/edit/${type}/${id}`,
-    data,
-    schema
+    form
   };
 
   return h.view('water/abstraction-reform/edit', view);

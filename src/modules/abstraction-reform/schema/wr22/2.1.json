@@ -15,7 +15,7 @@
       "type" : "number"
     },
     "point" : {
-      "$ref" : "water://type/ngr.json"
+      "$ref" : "water://types/ngr.json"
     }
   }
 }

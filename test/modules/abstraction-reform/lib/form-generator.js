@@ -122,116 +122,127 @@ lab.experiment('Test schema to form creation', () => {
   };
 
   lab.test('It should create a form object from a JSON schema', async () => {
-    const form = schemaToForm('/some/action', schema);
+    const csrfToken = 'abc';
+    const form = schemaToForm('/some/action', csrfToken, schema);
 
     expect(form).to.equal({
-      action: '/some/action',
-      method: 'POST',
-      isSubmitted: false,
-      fields: [
+      'action': '/some/action',
+      'method': 'POST',
+      'isSubmitted': false,
+      'fields': [
         {
-          name: 'choice',
-          options: {
-            choices: [
+          'name': 'csrf_token',
+          'value': 'abc',
+          'options': {
+            'widget': 'text',
+            'type': 'hidden',
+            'label': null,
+            'required': true
+          }
+        },
+        {
+          'name': 'choice',
+          'options': {
+            'choices': [
               'Red',
               'Yellow',
               'Blue'
             ],
-            label: 'Choice',
-            widget: 'radio',
-            required: true,
-            mapper: 'defaultMapper'
+            'label': 'Choice',
+            'widget': 'dropdown',
+            'required': true,
+            'mapper': 'defaultMapper'
           },
-          errors: [],
+          'errors': [],
           value: undefined
         },
         {
-          name: 'object_choice',
-          options: {
-            choices: [
+          'name': 'object_choice',
+          'options': {
+            'choices': [
               {
-                id: 'r',
-                value: 'Red'
+                'id': 'r',
+                'value': 'Red'
               },
               {
-                id: 'y',
-                value: 'Yellow'
+                'id': 'y',
+                'value': 'Yellow'
               },
               {
-                id: 'b',
-                value: 'Blue'
+                'id': 'b',
+                'value': 'Blue'
               }
             ],
-            label: 'Object choice',
-            widget: 'radio',
-            required: true,
-            key: 'id',
-            mapper: 'objectMapper'
+            'label': 'Object choice',
+            'widget': 'dropdown',
+            'required': true,
+            'key': 'id',
+            'mapper': 'objectMapper'
           },
-          errors: [],
+          'errors': [],
           value: undefined
         },
         {
-          name: 'string',
-          options: {
-            label: 'String',
-            widget: 'text',
-            required: true,
-            type: 'text',
-            controlClass: 'form-control',
-            autoComplete: true,
-            mapper: 'defaultMapper'
+          'name': 'string',
+          'options': {
+            'label': 'String',
+            'widget': 'text',
+            'required': true,
+            'type': 'text',
+            'controlClass': 'form-control',
+            'autoComplete': true,
+            'mapper': 'defaultMapper'
           },
-          errors: [],
+          'errors': [],
           value: undefined
         },
         {
-          name: 'number',
-          options: {
-            label: 'Number',
-            widget: 'text',
-            required: true,
-            type: 'text',
-            controlClass: 'form-control',
-            autoComplete: true,
-            mapper: 'numberMapper'
+          'name': 'number',
+          'options': {
+            'label': 'Number',
+            'widget': 'text',
+            'required': true,
+            'type': 'text',
+            'controlClass': 'form-control',
+            'autoComplete': true,
+            'mapper': 'numberMapper'
           },
-          errors: [],
+          'errors': [],
           value: undefined
         },
         {
-          name: 'boolean',
-          options: {
-            choices: [
+          'name': 'boolean',
+          'options': {
+            'choices': [
               {
-                value: false,
-                label: 'Yes'
+                'value': false,
+                'label': 'Yes'
               },
               {
-                value: true,
-                label: 'No'
+                'value': true,
+                'label': 'No'
               }
             ],
-            label: 'Boolean',
-            widget: 'radio',
-            required: true,
-            mapper: 'booleanMapper'
+            'label': 'Boolean',
+            'widget': 'radio',
+            'required': true,
+            'mapper': 'booleanMapper'
           },
-          errors: [],
+          'errors': [],
           value: undefined
         },
         {
-          name: null,
-          options: {
-            widget: 'button',
-            label: 'Submit'
+          'name': null,
+          'options': {
+            'widget': 'button',
+            'label': 'Submit'
           },
           value: undefined
         }
       ],
+      'errors': [],
       isValid: undefined,
-      errors: [],
-      validationType: 'json-schema'
+      'validationType': 'json-schema'
     });
   });
 });
