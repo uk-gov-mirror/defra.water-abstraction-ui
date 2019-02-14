@@ -12,10 +12,10 @@ const form = (query) => {
 
   f.fields.push(fields.text('query', {
     widget: 'search',
-    hint: 'Search by name, registered email address, return ID or licence number',
+    hint: 'Search by name, registered email, licence or return reference',
     errors: {
       'any.empty': {
-        message: 'Enter a name, registered email address, return ID or licence number'
+        message: 'Enter a name, registered email, licence or return reference'
       }
     }
   }));
