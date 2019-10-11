@@ -28,11 +28,9 @@
             </a>
           </li>
 
-          {% if returns.length %}
-            <li class="govuk-tabs__list-item">
-              <a class="govuk-tabs__tab" href="#returns">Returns</a>
-            </li>
-          {% endif %}
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="#returns">Returns</a>
+          </li>
 
           <li class="govuk-tabs__list-item">
             <a class="govuk-tabs__tab" href="#communications">Communications</a>
@@ -49,11 +47,9 @@
           {% include "nunjucks/view-licences/tabs/summary.njk" %}
         </section>
 
-        {% if returns.length %}
-          <section class="govuk-tabs__panel" id="returns">
-            {% include "nunjucks/view-licences/tabs/returns.njk" %}
-          </section>
-        {% endif %}
+        <section class="govuk-tabs__panel" id="returns">
+          {% include "nunjucks/view-licences/tabs/returns.njk" %}
+        </section>
 
         <section class="govuk-tabs__panel" id="communications">
           {% include "nunjucks/view-licences/tabs/communications.njk" %}

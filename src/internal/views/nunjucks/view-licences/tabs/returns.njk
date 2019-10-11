@@ -12,7 +12,6 @@
   {% endif %}
 {% endmacro %}
 
-
 {% macro returnRow(return) %}
 <tr class="govuk-table__row">
   <td class="govuk-table__cell" scope="row">
@@ -47,30 +46,32 @@
 
 <h2 class="govuk-heading-m">Returns</h2>
 
-{% for return in returns %}
-  {{ returnRowMobile(return) }}
-{% endfor %}
+{% if returns.length %}
+  {% for return in returns %}
+    {{ returnRowMobile(return) }}
+  {% endfor %}
 
+  <table class="govuk-table phone--hide">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Return reference</th>
+        <th class="govuk-table__header" scope="col">Purpose</th>
+        <th class="govuk-table__header" scope="col">Due</th>
+        <th class="govuk-table__header" scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for return in returns %}
+        {{ returnRow(return) }}
+      {% endfor %}
+    </tbody>
+  </table>
 
-<table class="govuk-table phone--hide">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header" scope="col">Return reference</th>
-      <th class="govuk-table__header" scope="col">Purpose</th>
-      <th class="govuk-table__header" scope="col">Due</th>
-      <th class="govuk-table__header" scope="col">Status</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    {% for return in returns %}
-      {{ returnRow(return) }}
-    {% endfor %}
-  </tbody>
-</table>
+  <hr class="phone--show govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-
-<hr class="phone--show govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-{% if hasMoreReturns %}
-  <a href="/licences/{{ documentId }}/returns">View all returns</a>
+  {% if hasMoreReturns %}
+    <a href="/licences/{{ documentId }}/returns">View all returns</a>
+  {% endif %}
+{% else %}
+  <p>No returns for this licence.</p>
 {% endif %}
