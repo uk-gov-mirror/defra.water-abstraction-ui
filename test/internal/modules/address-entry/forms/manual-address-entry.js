@@ -177,6 +177,7 @@ experiment('internal/modules/address-entry/forms/manual-address-entry', () => {
     beforeEach(() => {
       const request = createRequest();
       form = manualAddressEntry.form(request, address);
+      form.isValid = true;
       form.errors = [{
         name: 'testError',
         message: 'test error',
@@ -225,6 +226,16 @@ experiment('internal/modules/address-entry/forms/manual-address-entry', () => {
         const result = manualAddressEntry.applyRequiredFieldErrors(form, addressData);
         expect(result).to.equal(form);
       });
+    });
+
+    test('sets the isValid flag to false when new errors are found', () => {
+      const addressData = {
+        ...address,
+        addressLine2: '',
+        addressLine3: ''
+      };
+      const result = manualAddressEntry.applyRequiredFieldErrors(form, addressData);
+      expect(result.isValid).to.be.false();
     });
 
     experiment('applies new errors when', () => {
