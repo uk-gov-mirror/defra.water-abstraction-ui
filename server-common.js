@@ -1,3 +1,5 @@
+'use strict';
+
 const GoodWinston = require('good-winston');
 const ResetPasswordConfig = require('shared/lib/ResetPasswordConfig');
 const UpdatePasswordConfig = require('shared/lib/UpdatePasswordConfig');
@@ -49,6 +51,10 @@ const createPlugins = (config, logger, connectors) => ([
   },
   {
     plugin: require('shared/lib/session-forms').plugin
+  },
+  {
+    plugin: require('@hapi/crumb'),
+    options: config.hapiCrumb
   }
 ]);
 

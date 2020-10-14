@@ -123,5 +123,11 @@ module.exports = {
     password: process.env.REDIS_PASSWORD || '',
     ...!isLocal && { tls: {} },
     db: 0
+  },
+
+  hapiCrumb: {
+    cookieOptions: {
+      isSecure: !isLocal
+    }
   }
 };
