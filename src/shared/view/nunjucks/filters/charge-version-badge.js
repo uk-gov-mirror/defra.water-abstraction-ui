@@ -3,7 +3,6 @@
 const titleCase = require('title-case');
 
 const styles = {
-  draft: 'void',
   approved: 'success',
   replaced: 'inactive',
   superseded: 'inactive',
@@ -16,7 +15,6 @@ const styles = {
 //  Statuses are: 'Draft', 'Review', 'Change Request', 'Approved', 'Replaced' - We will also keep invalid to accomodate errors and edge cases. TT 2020-08-28
 const displayedTextTransformer = {
   current: 'approved',
-  draft: 'draft',
   approved: 'approved',
   replaced: 'replaced',
   superseded: 'replaced',
