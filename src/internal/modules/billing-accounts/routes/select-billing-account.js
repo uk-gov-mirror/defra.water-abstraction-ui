@@ -8,6 +8,10 @@ const preHandlers = require('../pre-handlers');
 const { charging } = require('internal/lib/constants').scope;
 const allowedScopes = [charging];
 
+const checkAnswers = Joi.boolean().truthy('true').optional().notes(
+  'Indicates the user should be redirected back to the check answers page rather than continuining through the flow'
+);
+
 module.exports = {
 
   ...createRoutePair(controller, 'selectExistingBillingAccount', {
@@ -84,7 +88,7 @@ module.exports = {
           key: Joi.string().required()
         },
         query: {
-          checkAnswers: Joi.boolean().truthy('true').optional()
+          checkAnswers
         }
       },
       pre: [{
@@ -129,7 +133,7 @@ module.exports = {
           key: Joi.string().required()
         },
         query: {
-          checkAnswers: Joi.boolean().truthy('true').optional()
+          checkAnswers
         }
       },
       pre: [{

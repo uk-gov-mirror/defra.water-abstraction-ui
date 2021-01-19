@@ -53,6 +53,7 @@ module.exports = {
   ...createRoutePair(controller, 'companySearch', {
     path: '/account-entry/{key}/company-search',
     options: {
+      description: 'Search for company in Companies House',
       auth: {
         scope: allowedScopes
       },
