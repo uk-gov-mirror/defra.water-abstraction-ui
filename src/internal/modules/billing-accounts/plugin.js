@@ -20,7 +20,7 @@ const OPTIONS_SCHEMA = Joi.object({
         address: Joi.object(),
         agentCompany: Joi.object().allow(null),
         contact: Joi.object().allow(null)
-      }),
+      }).unknown(true),
       otherwise: Joi.object().optional().default({})
     }
   ),
