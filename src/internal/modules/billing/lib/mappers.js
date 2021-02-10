@@ -1,9 +1,10 @@
 'use strict';
 
-const { omit, sortBy, groupBy, pick } = require('lodash');
+const { omit, sortBy, groupBy, pick, mapValues } = require('lodash');
 const sentenceCase = require('sentence-case');
 const routing = require('./routing');
 const { transactionStatuses } = require('shared/lib/constants');
+const Decimal = require('decimal.js-light');
 
 /**
  * Maps a batch for the batch list view, adding the badge, batch type and
@@ -30,6 +31,8 @@ const mapTransaction = transaction => ({
 
 const isTransactionInErrorStatus = transaction => transaction.status === transactionStatuses.error;
 
+const getDecimalValue = decimal => decimal.toFixed(2);
+
 const getTransactionTotals = transactions => {
   const hasErrors = transactions.some(isTransactionInErrorStatus);
   if (hasErrors) {
@@ -37,16 +40,18 @@ const getTransactionTotals = transactions => {
   }
 
   const initialValue = {
-    debits: 0,
-    credits: 0,
-    netTotal: 0
+    debits: new Decimal(0),
+    credits: new Decimal(0),
+    netTotal: new Decimal(0)
   };
 
-  return transactions.reduce((acc, row) => ({
-    debits: acc.debits + (row.isCredit ? 0 : row.value),
-    credits: acc.credits + (row.isCredit ? row.value : 0),
-    netTotal: acc.netTotal + row.value
+  const obj = transactions.reduce((acc, row) => ({
+    debits: acc.debits.plus(row.isCredit ? 0 : row.value),
+    credits: acc.credits.plus(row.isCredit ? row.value : 0),
+    netTotal: acc.netTotal.plus(row.value)
   }), initialValue);
+
+  return mapValues(obj, getDecimalValue);
 };
 
 const isMinimimChargeTransaction = trans => trans.isMinimumCharge;
