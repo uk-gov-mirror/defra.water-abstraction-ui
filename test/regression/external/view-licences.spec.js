@@ -10,6 +10,9 @@ const EMAIL_ADDRESS = userEmails.external;
 describe('view licences as an external user', function () {
   before(() => {
     loginAsUser(baseUrl, EMAIL_ADDRESS);
+    console.log(browser.getUrl());
+    browser.url(`${baseUrl}`);
+    console.log(browser.getUrl());
     const header = $('//body/header/div/div[2]/a');
     const title = $('h1');
     console.log(title.getText());
