@@ -7,43 +7,47 @@ const { baseUrl, userEmails } = require('./config');
 describe('view licences as an external user', () => {
   it('sees the licences table', () => {
     browser.navigateTo(`${baseUrl}/signin`);
-    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
+    console.log(browser.getSession());
+    console.log(browser.getUrl());
     let emailField = $('#email');
     emailField.setValue(userEmails.external);
-
     let passwordField = $('#password');
     passwordField.setValue('P@55word');
-
+    const title1 = $('h1[class="govuk-heading-l"]');
+    title1.getText();
+    console.log(browser.getSession());
+    console.log(browser.getUrl());
+    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
     SignInButton.click();
-    browser.pause(5000);
     const title = $('h1[class="govuk-heading-l"]');
     expect(title).toHaveText('Your licences');
-    const header = $('//body/header/div/div[2]/a');
-    header.getText();
-
-    const table = $('#results');
-    expect(table).toBeVisible();
+    console.log(browser.getSession());
+    console.log(browser.getUrl());
   });
 
-  // it('sees the three licences created by the setup routine', () => {
+  it('sees the three licences created by the setup routine', () => {
+    browser.getSession();
+    browser.getUrl();
   //   login();
   //   const table = $('#results');
   //   expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
   //   expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
   //   expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
   //   expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
-  // });
+  });
 
-  // it('clicks on the DAILY licence', () => {
-  //   const dailyLicenceLink = $('*=DAILY');
-  //   dailyLicenceLink.click();
+  it('clicks on the DAILY licence', () => {
+    browser.getSession();
+    browser.getUrl();
+    //   const dailyLicenceLink = $('*=DAILY');
+    //   dailyLicenceLink.click();
 
-  //   const licencePageHeader = getPageTitle();
+    //   const licencePageHeader = getPageTitle();
 
-  //   expect(licencePageHeader).toBeDisplayed();
+    //   expect(licencePageHeader).toBeDisplayed();
 
   //   expect(licencePageHeader).toHaveTextContaining('Licence number AT/CURR/DAILY/01');
-  // });
+  });
 
   // it('sees the Summary table', () => {
   //   const table = $('#summary');
