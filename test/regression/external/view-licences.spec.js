@@ -1,24 +1,30 @@
-'use strict';
+/* eslint-disable no-undef */
 
-const { loginAsUser } = require('../shared/helpers/login-as-user');
+// const { loginAsUser } = require('../shared/helpers/login-as-user');
 const { baseUrl, userEmails } = require('./config');
 // const { getPageTitle } = require('../shared/helpers/page');
 
 const EMAIL_ADDRESS = userEmails.external;
 
-/* eslint-disable no-undef */
-describe('view licences as an external user', function () {
-  before(() => {
+const loginAsUser = (userEmail) => {
+  it('loggin in OK!!!', () => {
     browser.url(`${baseUrl}/signin`);
-    console.log(browser.getUrl());
-    loginAsUser(EMAIL_ADDRESS);
-    const header = $('//body/header/div/div[2]/a');
-    const title = $('h1');
-    console.log(title.getText());
-    console.log(browser.getUrl());
-    expect(title).toHaveText('Your licences');
-    console.log(`∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞###########∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ ${header.elementId}∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞######∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞`);
+    const title = $('h1[class="govuk-heading-l"]');
+    const titleText = title.getText();
+    console.log(titleText);
+    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
+    let emailField = $('#email');
+    emailField.setValue(userEmail);
+
+    let passwordField = $('#password');
+    passwordField.setValue('P@55word');
+
+    SignInButton.click();
   });
+};
+
+describe('view licences as an external user', function () {
+  loginAsUser(EMAIL_ADDRESS);
 
   it('sees the page title', () => {
     const header = $('//body/header/div/div[2]/a');
