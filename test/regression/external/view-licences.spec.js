@@ -34,7 +34,6 @@ describe('view licences as an external user', () => {
   });
 
   it('clicks on the DAILY licence', () => {
-    browser.getSession();
     browser.getUrl();
     //   const dailyLicenceLink = $('*=DAILY');
     //   dailyLicenceLink.click();
