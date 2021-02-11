@@ -1,18 +1,21 @@
 /* eslint-disable no-undef */
 
-const loginAsUser = async (baseUrl, userEmail) => {
+const loginAsUser = (baseUrl, userEmail) => {
   try {
-    await browser.url(`${baseUrl}/signin`);
-    const SignInButton = await $('button[class="govuk-button govuk-button--start"]');
+    browser.url(`${baseUrl}/signin`);
+    const title = $('h1[class="govuk-heading-l"]');
+    const titleText = title.getText();
+    console.log(titleText);
+    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
 
-    let emailField = await $('#email');
-    await emailField.setValue(userEmail);
+    let emailField = $('#email');
+    emailField.setValue(userEmail);
 
-    let passwordField = await $('#password');
-    await passwordField.setValue('P@55word');
+    let passwordField = $('#password');
+    passwordField.setValue('P@55word');
 
-    await SignInButton.click();
-    await browser.pause(500);
+    SignInButton.click();
+    browser.pause(500);
   } catch (err) {
     console.log(err);
   }
