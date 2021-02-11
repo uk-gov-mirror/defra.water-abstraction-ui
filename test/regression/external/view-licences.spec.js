@@ -10,6 +10,11 @@ const EMAIL_ADDRESS = userEmails.external;
 describe('view licences as an external user', function () {
   before(() => {
     loginAsUser(baseUrl, EMAIL_ADDRESS);
+    const header = $('//body/header/div/div[2]/a');
+    const title = $('h1');
+    console.log(title.getText());
+    expect(title).toHaveText('Your licences');
+    console.log(`∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞###########∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ ${header.elementId}∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞######∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞`);
   });
 
   it('sees the page title', () => {
