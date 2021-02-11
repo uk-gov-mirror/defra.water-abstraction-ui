@@ -6,11 +6,8 @@ const { baseUrl, userEmails } = require('./config');
 
 describe('view licences as an external user', function () {
 
-  before(() => {
-    browser.navigateTo(`${baseUrl}/signin`);
-  });
-
   it('loggin in OK!!!', () => {
+    browser.navigateTo(`${baseUrl}/signin`);
     const title = $('h1[class="govuk-heading-l"]');
     const titleText = title.getText();
     console.log(titleText);
@@ -25,6 +22,7 @@ describe('view licences as an external user', function () {
   });
 
   it('sees the page title', () => {
+    browser.navigateTo(`${baseUrl}/licences`);
     const header = $('//body/header/div/div[2]/a');
     const title = $('h1');
     console.log(title.getText());
