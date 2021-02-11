@@ -18,7 +18,7 @@ describe('view licences as an external user', () => {
     const SignInButton = $('button=Sign in');
     SignInButton.click();
     const title = $('h1[class="govuk-heading-l"]');
-    title.waitForExist({ timeout: 5000 });
+    title.waitForExist({ timeout: 20000 });
     expect(title).toHaveText('Your licences');
     console.log(browser.getUrl());
   });
