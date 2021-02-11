@@ -9,7 +9,7 @@ const EMAIL_ADDRESS = userEmails.external;
 /* eslint-disable no-undef */
 describe('view licences as an external user', function () {
   before(() => {
-    loginAsUser(baseUrl, EMAIL_ADDRESS);
+    const browser = loginAsUser(baseUrl, EMAIL_ADDRESS);
     console.log(browser.getUrl());
     browser.url(`${baseUrl}`);
     console.log(browser.getUrl());

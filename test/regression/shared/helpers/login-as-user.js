@@ -16,6 +16,7 @@ const loginAsUser = (baseUrl, userEmail) => {
 
     SignInButton.click();
     browser.pause(500);
+    return browser;
   } catch (err) {
     console.log(err);
   }
