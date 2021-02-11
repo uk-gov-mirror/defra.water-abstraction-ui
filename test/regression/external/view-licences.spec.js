@@ -9,13 +9,13 @@ const EMAIL_ADDRESS = userEmails.external;
 /* eslint-disable no-undef */
 describe('view licences as an external user', function () {
   before(() => {
-    const browser = loginAsUser(baseUrl, EMAIL_ADDRESS);
+    browser.url(`${baseUrl}/signin`);
     console.log(browser.getUrl());
-    browser.url(`${baseUrl}`);
-    console.log(browser.getUrl());
+    loginAsUser(EMAIL_ADDRESS);
     const header = $('//body/header/div/div[2]/a');
     const title = $('h1');
     console.log(title.getText());
+    console.log(browser.getUrl());
     expect(title).toHaveText('Your licences');
     console.log(`∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞###########∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ ${header.elementId}∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞######∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞`);
   });

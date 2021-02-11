@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 
-const loginAsUser = (baseUrl, userEmail) => {
-  try {
-    browser.url(`${baseUrl}/signin`);
+const loginAsUser = (userEmail) => {
+  try {   
     const title = $('h1[class="govuk-heading-l"]');
     const titleText = title.getText();
     console.log(titleText);
@@ -15,8 +14,6 @@ const loginAsUser = (baseUrl, userEmail) => {
     passwordField.setValue('P@55word');
 
     SignInButton.click();
-    browser.pause(500);
-    return browser;
   } catch (err) {
     console.log(err);
   }
