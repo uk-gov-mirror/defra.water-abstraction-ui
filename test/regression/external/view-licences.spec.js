@@ -12,46 +12,44 @@ describe('view licences as an external user', function () {
     await loginAsUser(baseUrl, EMAIL_ADDRESS);
   });
 
-  it('sees the page title', async () => {
-    const title = await getPageTitle();
-
+  it('sees the page title', () => {
+    const title = getPageTitle();
     expect(title).toHaveText('Your licences');
   });
 
-  it('sees the licences table', async () => {
-    const table = await $('#results');
+  it('sees the licences table', () => {
+    const table = $('#results');
 
     expect(table).toBeVisible();
   });
 
-  it('sees the three licences created by the setup routine', async () => {
-    const table = await $('#results');
-
-    await expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
-    await expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
-    await expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
-    await expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
+  it('sees the three licences created by the setup routine', () => {
+    const table = $('#results');
+    expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
+    expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
+    expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
+    expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
   });
 
-  it('clicks on the DAILY licence', async () => {
-    const dailyLicenceLink = await $('*=DAILY');
-    await dailyLicenceLink.click();
+  it('clicks on the DAILY licence', () => {
+    const dailyLicenceLink = $('*=DAILY');
+    dailyLicenceLink.click();
 
-    const licencePageHeader = await getPageTitle();
+    const licencePageHeader = getPageTitle();
 
-    await expect(licencePageHeader).toBeDisplayed();
+    expect(licencePageHeader).toBeDisplayed();
 
-    await expect(licencePageHeader).toHaveTextContaining('Licence number AT/CURR/DAILY/01');
+    expect(licencePageHeader).toHaveTextContaining('Licence number AT/CURR/DAILY/01');
   });
 
-  it('sees the Summary table', async () => {
-    const table = await $('#summary');
+  it('sees the Summary table', () => {
+    const table = $('#summary');
 
     expect(table).toBeVisible();
   });
 
-  it('checks that the abstraction point is correct, for funsies', async () => {
-    const table = await $('#summary');
+  it('checks that the abstraction point is correct, for funsies', () => {
+    const table = $('#summary');
 
     expect(table).toHaveTextContaining('At National Grid Reference TQ 123 123 (Test local name)');
   });

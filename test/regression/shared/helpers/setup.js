@@ -15,18 +15,17 @@ const urlJoin = require('url-join');
  * @param {Object} [overrides]
  * @return {Promise}
  */
-const waterRequest = async (tail, overrides = {}, method) => {
+const waterRequest = async (tail, overrides = {}) => {
   const opts = Object.assign({}, {
     uri: urlJoin(process.env.WATER_URI, tail),
-    method,
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.JWT_TOKEN}`
     }
   }, overrides);
   console.log(`Calling ${opts.method} ${opts.uri}`);
-  const data = await rp(opts);
+  await rp(opts);
   console.log(`Calling ${opts.method} ${opts.uri} - success!`);
-  console.log(data);
 };
 
 /**
@@ -37,20 +36,13 @@ const setUp = () => waterRequest('/acceptance-tests/set-up', {
   form: {
     includeInternalUsers: true
   }
-}, 'POST');
-
-/**
- * Sets up acceptance test data
- * @return {Promise}
- */
-const waterServerStatus = () => waterRequest('/service-status', {}, 'GET');
+});
 
 /**
  * Tears down acceptance test data
  * @return {Promise}
  */
-const tearDown = () => waterRequest('/acceptance-tests/tear-down', {}, 'POST');
+const tearDown = () => waterRequest('/acceptance-tests/tear-down');
 
 exports.setUp = setUp;
 exports.tearDown = tearDown;
-exports.waterServerStatus = waterServerStatus;
