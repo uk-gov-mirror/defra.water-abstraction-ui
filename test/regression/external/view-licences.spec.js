@@ -15,7 +15,7 @@ describe('view licences as an external user', () => {
     const title1 = $('h1[class="govuk-heading-l"]');
     title1.getText();
     console.log(browser.getUrl());
-    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
+    const SignInButton = $('button=Sign in');
     SignInButton.click();
     const title = $('h1[class="govuk-heading-l"]');
     title.waitForExist({ timeout: 5000 });
@@ -26,11 +26,11 @@ describe('view licences as an external user', () => {
   it('sees the three licences created by the setup routine', () => {
     console.log(browser.getUrl());
   //   login();
-  //   const table = $('#results');
-  //   expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
-  //   expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
-  //   expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
-  //   expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
+    // const table = $('#results');
+    // expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
+    // expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
+    // expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
+    // expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
   });
 
   it('clicks on the DAILY licence', () => {
