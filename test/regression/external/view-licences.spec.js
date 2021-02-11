@@ -4,27 +4,25 @@
 const { baseUrl, userEmails } = require('./config');
 // const { getPageTitle } = require('../shared/helpers/page');
 
-const EMAIL_ADDRESS = userEmails.external;
+describe('view licences as an external user', function () {
 
-const loginAsUser = (userEmail) => {
+  before(() => {
+    browser.navigateTo(`${baseUrl}/signin`);
+  });
+
   it('loggin in OK!!!', () => {
-    browser.url(`${baseUrl}/signin`);
     const title = $('h1[class="govuk-heading-l"]');
     const titleText = title.getText();
     console.log(titleText);
     const SignInButton = $('button[class="govuk-button govuk-button--start"]');
     let emailField = $('#email');
-    emailField.setValue(userEmail);
+    emailField.setValue(userEmails.external);
 
     let passwordField = $('#password');
     passwordField.setValue('P@55word');
 
     SignInButton.click();
   });
-};
-
-describe('view licences as an external user', function () {
-  loginAsUser(EMAIL_ADDRESS);
 
   it('sees the page title', () => {
     const header = $('//body/header/div/div[2]/a');
