@@ -7,7 +7,6 @@ const { baseUrl, userEmails } = require('./config');
 describe('view licences as an external user', () => {
   it('sees the licences table', () => {
     browser.navigateTo(`${baseUrl}/signin`);
-    console.log(browser.getSession());
     console.log(browser.getUrl());
     let emailField = $('#email');
     emailField.setValue(userEmails.external);
@@ -15,19 +14,17 @@ describe('view licences as an external user', () => {
     passwordField.setValue('P@55word');
     const title1 = $('h1[class="govuk-heading-l"]');
     title1.getText();
-    console.log(browser.getSession());
     console.log(browser.getUrl());
     const SignInButton = $('button[class="govuk-button govuk-button--start"]');
     SignInButton.click();
     const title = $('h1[class="govuk-heading-l"]');
+    title.waitForExist({ timeout: 5000 });
     expect(title).toHaveText('Your licences');
-    console.log(browser.getSession());
     console.log(browser.getUrl());
   });
 
   it('sees the three licences created by the setup routine', () => {
-    browser.getSession();
-    browser.getUrl();
+    console.log(browser.getUrl());
   //   login();
   //   const table = $('#results');
   //   expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
