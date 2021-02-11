@@ -4,45 +4,40 @@
 const { baseUrl, userEmails } = require('./config');
 // const { getPageTitle } = require('../shared/helpers/page');
 
+const login = () => {
+  browser.navigateTo(`${baseUrl}/signin`);
+  const title = $('h1[class="govuk-heading-l"]');
+  const titleText = title.getText();
+  console.log(titleText);
+  const SignInButton = $('button[class="govuk-button govuk-button--start"]');
+  let emailField = $('#email');
+  emailField.setValue(userEmails.external);
+
+  let passwordField = $('#password');
+  passwordField.setValue('P@55word');
+
+  SignInButton.click();
+  const header = $('//body/header/div/div[2]/a');
+  expect(title).toHaveText('Your licences');
+  console.log(`∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞###########∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ ${header.elementId}∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞######∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞`);
+};
+
 describe('view licences as an external user', function () {
+  it('sees the licences table', () => {
+    login();
+    const table = $('#results');
 
-  it('loggin in OK!!!', () => {
-    browser.navigateTo(`${baseUrl}/signin`);
-    const title = $('h1[class="govuk-heading-l"]');
-    const titleText = title.getText();
-    console.log(titleText);
-    const SignInButton = $('button[class="govuk-button govuk-button--start"]');
-    let emailField = $('#email');
-    emailField.setValue(userEmails.external);
-
-    let passwordField = $('#password');
-    passwordField.setValue('P@55word');
-
-    SignInButton.click();
+    expect(table).toBeVisible();
   });
 
-  it('sees the page title', () => {
-    browser.navigateTo(`${baseUrl}/licences`);
-    const header = $('//body/header/div/div[2]/a');
-    const title = $('h1');
-    console.log(title.getText());
-    expect(title).toHaveText('Your licences');
-    console.log(`∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞###########∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ ${header.elementId}∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞######∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞`);
+  it('sees the three licences created by the setup routine', () => {
+    login();
+    const table = $('#results');
+    expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
+    expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
+    expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
+    expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
   });
-
-  // it('sees the licences table', () => {
-  //   const table = $('#results');
-
-  //   expect(table).toBeVisible();
-  // });
-
-  // it('sees the three licences created by the setup routine', () => {
-  //   const table = $('#results');
-  //   expect(table).toHaveTextContaining('AT/CURR/DAILY/01');
-  //   expect(table).toHaveTextContaining('AT/CURR/WEEKLY/01');
-  //   expect(table).toHaveTextContaining('AT/CURR/MONTHLY/01');
-  //   expect(table).not.toHaveTextContaining('AT/CURR/XXXXXX/01');
-  // });
 
   // it('clicks on the DAILY licence', () => {
   //   const dailyLicenceLink = $('*=DAILY');
