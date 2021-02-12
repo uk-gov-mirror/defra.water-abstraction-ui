@@ -20,6 +20,7 @@ describe('view licences as an external user', () => {
     expect(title).toHaveText('Sign in');
     console.log(browser.getUrl());
     signInButton.click();
+    console.log(browser.getUrl());
     const title2 = $('h1[class="govuk-heading-l"]');
     title2.waitForExist({ timeout: 60000, interval: 5000 });
     expect(title2).toHaveText('Your licences');
