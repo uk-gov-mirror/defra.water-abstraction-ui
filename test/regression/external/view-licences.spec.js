@@ -23,7 +23,7 @@ describe('view licences as an external user', () => {
     signInButton.click();
     browser.switchWindow('Your licences');
     const title2 = $('h1[class="govuk-heading-l"]');
-    title2.waitForExist({ timeout: 100000 });
+    title2.waitForExist({ timeout: 60000, interval: 5000 });
     expect(title2).toHaveText('Your licences');
   });
 
